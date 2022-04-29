@@ -1,0 +1,31 @@
+if ! type brew >/dev/null; then
+  echo "Installing Homebrew…"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+brew tap homebrew/cask-versions
+brew update --preinstall
+
+brew_install() (
+  formula="${1}"
+  
+  if ! brew_is_installed "${formula}"; then
+    brew install --no-quarantine "${formula}"
+  elif ! brew_is_latest "${formula}"; then
+    brew upgrade --no-quarantine "${formula}"
+  fi
+)
+
+brew_is_installed() (
+  formula="${1}"
+
+  all_installed=$(brew list --full-name)
+  if (( $all_installed[(Ie)$formula] )); then return 0; else return 1; fi
+)
+
+brew_is_latest() (
+  formula="${1}"
+
+  all_outdated=$(brew outdated --quiet)
+  if (( $all_outdated[(Ie)$formula] )); then return 1; else return 0; fi
+)

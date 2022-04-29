@@ -1,0 +1,13 @@
+use volta
+
+merge_json() (
+  target="${1}"
+  source="${2}"
+
+  # Run from the context of the current module
+  cd "${FILET_CURRENT_MODULE_ROOT}"
+
+  "${FILET_MODULE_ROOT_MERGE_JSON}/merge.js" "${target:A}" "${source:A}"
+
+  cd -
+)
