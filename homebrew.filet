@@ -4,7 +4,7 @@ if ! type brew >/dev/null; then
 fi
 
 brew tap homebrew/cask-versions
-brew update --preinstall
+brew update --quiet --preinstall
 
 brew_install() (
   formula="${1}"
