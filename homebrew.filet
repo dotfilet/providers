@@ -4,6 +4,7 @@ if ! type /opt/homebrew/bin/brew >/dev/null; then
 fi
 
 /opt/homebrew/bin/brew tap homebrew/cask-versions
+/opt/homebrew/bin/brew tap homebrew/cask-fonts
 /opt/homebrew/bin/brew update --quiet --preinstall
 
 brew_install() (
