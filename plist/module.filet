@@ -24,8 +24,8 @@ plist_set() (
 
   set +e
   /usr/libexec/PlistBuddy "${deletes[@]}" "${plist}" > /dev/null 2>&1
-  set -e
   /usr/libexec/PlistBuddy "${adds[@]}" "${plist}"
+  set -e
 )
 
 plist_copy() (
