@@ -1,0 +1,33 @@
+plist_set() (
+  if (( (# - 1) % 3 != 0 )); then
+    fail "Usage: plist_set FILE [type key value]…"
+  fi
+
+  local plist="${1:A}"
+  local num_tuples=$(( (# - 1) / 3 ))
+  local deletes=()
+  local adds=()
+
+  log_debug "plist_set ${plist}:"
+  for tuple in {1..$num_tuples}; do
+    local type="${@[($tuple - 1) * 3 + 2]}"
+    local key="${@[($tuple - 1) * 3 + 3]}"
+    local value="${@[($tuple - 1) * 3 + 4]}"
+    log_debug "  ${key}: ${value} (${type})"
+
+    key=":${${key//./:}//\'/\\\'}"
+    value="${value//\'/\\\'}"
+
+    deletes+=(-c "Delete '${key}'")
+    adds+=(-c "Add '${key}' ${type} '${value}'")
+  done
+
+  set +e
+  /usr/libexec/PlistBuddy "${deletes[@]}" "${plist}" > /dev/null 2>&1
+  set -e
+  /usr/libexec/PlistBuddy "${adds[@]}" "${plist}"
+)
+
+plist_copy() (
+
+)
