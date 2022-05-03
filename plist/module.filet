@@ -29,5 +29,16 @@ plist_set() (
 )
 
 plist_copy() (
+  local plist="${1:A}"
+  local source_key=":${${2//./:}//\'/\\\'}"
+  local target_key=":${${3//./:}//\'/\\\'}"
 
+  /usr/libexec/PlistBuddy -c "Copy '${source_key}' '${target_key}'" "${plist}"
+)
+
+plist_has_key() (
+  local plist="${1:A}"
+  local key=":${${2//./:}//\'/\\\'}"
+
+  /usr/libexec/PlistBuddy -c "Print '${key}'" "${plist}" > /dev/null 2>&1
 )
