@@ -1,0 +1,6 @@
+launch_item() (
+  application="${1}"
+  hidden="${2:-false}"
+
+  osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"${application}\", hidden:${hidden}}" > /dev/null
+)
