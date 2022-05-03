@@ -1,18 +1,18 @@
-if ! type brew >/dev/null; then
+if ! type /opt/homebrew/bin/brew >/dev/null; then
   echo "Installing Homebrew…"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-brew tap homebrew/cask-versions
-brew update --quiet --preinstall
+/opt/homebrew/bin/brew tap homebrew/cask-versions
+/opt/homebrew/bin/brew update --quiet --preinstall
 
 brew_install() (
   formula="${1}"
   
   if ! brew_is_installed "${formula}"; then
-    brew install --no-quarantine "${formula}"
+    /opt/homebrew/bin/brew install --no-quarantine "${formula}"
   elif ! brew_is_latest "${formula}"; then
-    brew upgrade --no-quarantine "${formula}"
+    /opt/homebrew/bin/brew upgrade --no-quarantine "${formula}"
   fi
 )
 
