@@ -1,18 +1,26 @@
 plist_set() (
-  if (( (# - 1) % 3 != 0 )); then
-    fail "Usage: plist_set FILE [type key value]…"
+  local plist="${1:A}"
+  local prefix
+  local offset
+  if (( (# - 1) % 3 == 0 )); then
+    prefix=""
+    offset=1
+  elif (( (# - 2) % 3 == 0 )); then
+    prefix="${2}."
+    offset=2
+  else
+    fail "Usage: plist_set FILE (PREFIX?) [TYPE KEY VALUE]…"
   fi
 
-  local plist="${1:A}"
-  local num_tuples=$(( (# - 1) / 3 ))
+  local num_tuples=$(( (# - offset) / 3 ))
   local deletes=()
   local adds=()
 
   log_debug "plist_set ${plist}:"
   for tuple in {1..$num_tuples}; do
-    local type="${@[($tuple - 1) * 3 + 2]}"
-    local key="${@[($tuple - 1) * 3 + 3]}"
-    local value="${@[($tuple - 1) * 3 + 4]}"
+    local type="${@[($tuple - 1) * 3 + $offset + 1]}"
+    local key="${prefix}${@[($tuple - 1) * 3 + $offset + 2]}"
+    local value="${@[($tuple - 1) * 3 + $offset + 3]}"
     log_debug "  ${key}: ${value} (${type})"
 
     key=":${${key//./:}//\'/\\\'}"
