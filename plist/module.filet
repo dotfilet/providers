@@ -37,6 +37,8 @@ plist_set() (
 )
 
 plist_copy() (
+  log_debug "plist_copy ${1:A} ${2} ${3}"
+
   local plist="${1:A}"
   local source_key=":${${2//./:}//\'/\\\'}"
   local target_key=":${${3//./:}//\'/\\\'}"
@@ -49,4 +51,18 @@ plist_has_key() (
   local key=":${${2//./:}//\'/\\\'}"
 
   /usr/libexec/PlistBuddy -c "Print '${key}'" "${plist}" > /dev/null 2>&1
+)
+
+plist_import() (
+  cd "${FILET_CURRENT_MODULE_ROOT}"
+  local source="${1:A}"
+  local target="${2:A}"
+  cd -
+  log_debug "plist_import ${source} ${target} ${3}"
+  local key=":${${3//./:}//\'/\\\'}"
+
+  /usr/libexec/PlistBuddy \
+    -c "Delete '${key}'" \
+    -c "Add '${key}' array" \
+    -c "Merge '${source}' '${key}'" "${target}"
 )
