@@ -9,10 +9,12 @@ fi
 
 brew_install() (
   formula="${1}"
-  
+
   if ! brew_is_installed "${formula}"; then
+    log_debug "brew install ${formula}"
     /opt/homebrew/bin/brew install --no-quarantine "${formula}"
   elif ! brew_is_latest "${formula}"; then
+    log_debug "brew upgrade ${formula}"
     /opt/homebrew/bin/brew upgrade --no-quarantine "${formula}"
   fi
 )
@@ -20,13 +22,13 @@ brew_install() (
 brew_is_installed() (
   formula="${1}"
 
-  all_installed=$(brew list --full-name)
+  all_installed=($(/opt/homebrew/bin/brew list --full-name))
   if (( $all_installed[(Ie)$formula] )); then return 0; else return 1; fi
 )
 
 brew_is_latest() (
   formula="${1}"
 
-  all_outdated=$(brew outdated --quiet)
+  all_outdated=$(/opt/homebrew/bin/brew outdated --quiet)
   if (( $all_outdated[(Ie)$formula] )); then return 1; else return 0; fi
 )
