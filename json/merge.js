@@ -1,6 +1,7 @@
 #!/usr/bin/env volta run --node lts node
 
 const fs = require('fs');
+const path = require('path');
 
 function main(targetPath, sourcePath) {
   const target = fileExists(targetPath) ? readJson(targetPath) : {};
@@ -9,6 +10,7 @@ function main(targetPath, sourcePath) {
   // Dumb merge for now.
   const newTarget = { ...target, ...source };
   
+  fs.mkdirSync(path.dirname(targetPath), { recursive: true });
   fs.writeFileSync(targetPath, JSON.stringify(newTarget, null, 2));
 }
 
