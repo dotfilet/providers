@@ -3,6 +3,10 @@ if ! type /opt/homebrew/bin/brew >/dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
+if ! (( $path[(Ie)/opt/homebrew/bin] )); then
+  path=(/opt/homebrew/bin $path)
+fi
+
 /opt/homebrew/bin/brew tap homebrew/cask-versions
 /opt/homebrew/bin/brew tap homebrew/cask-fonts
 /opt/homebrew/bin/brew update --quiet --preinstall
