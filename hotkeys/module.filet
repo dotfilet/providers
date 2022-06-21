@@ -1,0 +1,30 @@
+set_hotkey() (
+  local enabled="${1}"
+  local key_id="${2}"
+  local parameters=("${@:3}")
+  
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add "${key_id}" "
+    <dict>
+      <key>enabled</key><false/>
+      <key>value</key><dict>
+        <key>type</key><string>standard</string>
+        <key>parameters</key>
+        <array>
+          <integer>${parameters[1]}</integer>
+          <integer>${parameters[2]}</integer>
+          <integer>${parameters[3]}</integer>
+        </array>
+      </dict>
+    </dict>
+  "
+
+  /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+)
+
+enable_hotkey() (
+  set_hotkey true "${@}"
+)
+
+disable_hotkey() (
+  set_hotkey true "${@}"
+)
