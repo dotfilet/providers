@@ -7,10 +7,6 @@ if ! (( $path[(Ie)/opt/homebrew/bin] )); then
   path=(/opt/homebrew/bin $path)
 fi
 
-/opt/homebrew/bin/brew tap homebrew/cask-versions
-/opt/homebrew/bin/brew tap homebrew/cask-fonts
-/opt/homebrew/bin/brew update --quiet --preinstall
-
 brew_install() (
   formula="${1}"
 
@@ -36,3 +32,13 @@ brew_is_latest() (
   all_outdated=$(/opt/homebrew/bin/brew outdated --quiet)
   if (( $all_outdated[(Ie)$formula] )); then return 1; else return 0; fi
 )
+
+brew_tap() (
+  keg="${1}"
+
+  /opt/homebrew/bin/brew tap "${keg}"
+)
+
+brew_tap homebrew/cask-versions
+brew_tap homebrew/cask-fonts
+/opt/homebrew/bin/brew update --quiet --preinstall
